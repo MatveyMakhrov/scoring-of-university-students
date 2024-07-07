@@ -1,6 +1,6 @@
 import PySimpleGUI as sg
 
-#Данные для выпадающих окон
+# Данные для выпадающих окон (института и группы).
 data_for_colleges = {
     'ИБО': ['БЛГ-20-1', 'БЛГ-20-11', 'БЛГ-20-12', 'БЛГ-20-13', 'БЛГ-20-4', 'БЛГ-20-5'],
     'ИНМиН': ['БМТМ-20-1', 'БНМТ-20-1', 'БФЗ-20-1', 'БЭН-20-2'],
@@ -10,9 +10,12 @@ data_for_colleges = {
     'ЭУПП им. В.А. Роменца': ['БМН-20-1', 'БМН-20-2', 'БМН-20-3', 'БЭК-20-1', 'БЭК-20-3']
 }
 
+# Данные для выпадающих окон (предмета и оценки).
 lessons = ['Право', 'Физическая культура', 'Безопасность жизнедеятельности', 'Инженерная и компьютерная графика', 'Химия', 'Иностранный язык', 'Геодезия', 'Инженерная компьютерная графика', 'Информатика', 'Программирование и алгоритмизация', 'Практическая фонетика', 'Математика']
-scores = ['2', '3', '4', '5']
+scores = ['5', '4', '3', '2']
 
+# Словарь, который будет заполняться пользователем
+# и отправляться на модель.
 data = {    
         'Институт': None,
         'Группа': None,
@@ -31,28 +34,31 @@ data = {
         'Иностранный язык': '0'
 }
 
+# Переменные для связи двух выпадающих окон (институт и группа).
 colleges = list(data_for_colleges.keys())
 groups = data_for_colleges[colleges[0]]
 
-# All the stuff inside your window.
+# Всё содержимое окна приложения
 layout = [  [sg.Text('ФИО студента:'), sg.InputText(key='-NAME-')],
             [sg.Text('Институт:'), sg.Combo(colleges, key='-COLLEGE-', enable_events=True), sg.Text('Группа:'), sg.Combo(groups, key='-GROUP-')],
             [sg.Text('Чтобы добавить предмет, нажмите "+"'), sg.B('+', key='-ADD FRAME-')],
             [sg.Frame('', [[sg.T('Успеваемость')]], key='-FRAME-')],
             [sg.Button('Ок'), sg.Button('Закрыть')] ]
 
-# Create the Window
+# Создание окна.
 window = sg.Window('Тестовое приложение', layout)
 
-i = 0
+i = 0  # Переменная для отслеживания номера строчки предмета и оценки.
 
-# Event Loop to process "events" and get the "values" of the inputs
+# Цикл обработки событий для "events" и получения "values" входных данных.
 while True:
     event, values = window.read()
 
-    # if user closes window or clicks cancel
+    # Если пользователь закроет окно или нажмет кнопку 'Закрыть'
     if event == sg.WIN_CLOSED or event == 'Закрыть':
         break
+
+    # Если пользователь нажмёт на кнопку '+'
     if event == '-ADD FRAME-':
         new_combo_key = f'-IN-{i}-'
         new_score_key = f'-SCORE-{i}-'
@@ -61,18 +67,13 @@ while True:
                                                   sg.T('Оценка:'), 
                                                   sg.Combo(scores, key=new_score_key)]])
         i += 1
+    # Добавление данных об предметах в словарь
     else:
         for key in values:
-            # if key not in ['-COLLEGE-', '-GROUP-']:
-            #     print('')
-            #     # continue
             if key.startswith('-IN-'):  
                 idx = key.split('-')[2]
                 subject = values[key]
                 score_key = f'-SCORE-{idx}-'
-                # print(subject)
-                #print(subject)
-                #print(score_key) 
                 if subject in data and score_key in values:
                     data[subject] = values[score_key]
                     # print(data)  # Выводим словарь для проверки
@@ -83,6 +84,7 @@ while True:
         new_groups = data_for_colleges[selected_colleges]
         window['-GROUP-'].update(values=new_groups)
 
+    # Если пользователь нажмёт 'Ок', Словарь полностью заполнится
     if event == 'Ок':
         data['Институт'] = values['-COLLEGE-']
         data['Группа'] = values['-GROUP-']
