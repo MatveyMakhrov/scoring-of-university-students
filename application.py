@@ -70,6 +70,8 @@ layout = [  [sg.Text('ФИО студента:'), sg.InputText(key='-NAME-')],
 window = sg.Window('Тестовое приложение', layout)
 
 i = 0  # Переменная для отслеживания номера строчки предмета и оценки.
+new_combo_key = f'-IN-{i}-'
+new_score_key = f'-SCORE-{i}-'
 
 # Цикл обработки событий для "events" и получения "values" входных данных.
 while True:
@@ -81,8 +83,7 @@ while True:
 
     # Если пользователь нажмёт на кнопку '+'
     if event == '-ADD FRAME-':
-        new_combo_key = f'-IN-{i}-'
-        new_score_key = f'-SCORE-{i}-'
+
         window.extend_layout(window['-FRAME-'], [[sg.T('Предмет:'),
                                                   sg.Combo(lessons, key=new_combo_key, enable_events=True), 
                                                   sg.T('Оценка:'), 
@@ -96,7 +97,7 @@ while True:
                 idx = key.split('-')[2]
                 subject = values[key]
                 score_key = f'-SCORE-{idx}-'
-                print(values[score_key])
+                # print(values[score_key])
                 if subject in data and score_key in values:
                     if values[score_key] == 'Отлично':
                         values[score_key] = '5'
