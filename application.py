@@ -1,4 +1,20 @@
+from student import NewStudent
+
 import PySimpleGUI as sg
+
+import pickle
+
+# Импорт модели
+with open('scoring_cb.pkl', 'rb') as file:
+    model = pickle.load(file)
+
+
+def predict_student(data_dict):
+    student = NewStudent()
+    student.load_data_from_dict(data_dict)
+    return model.predict(student.data_processing())[0]
+
+
 
 # Данные для выпадающих окон (института и группы).
 data_for_colleges = {
@@ -136,6 +152,9 @@ while True:
         # data['Группа'] = values['-GROUP-']
         data['Долги'] = debts
         print(data)
-        window['output'].update('Студент отчислен!') or window['output'].update('Студент не отчислен!')
+        if predict_student(data) == 1:
+            window['output'].update('Студент отчислен!')
+        else:
+            window['output'].update('Студент не отчислен!')
 
 window.close()
