@@ -1,7 +1,3 @@
-import warnings
-warnings.filterwarnings("ignore", message="numpy.dtype size changed")
-warnings.filterwarnings("ignore", message="numpy.ufunc size changed")
-
 from student import NewStudent
 
 import PySimpleGUI as sg
@@ -87,10 +83,9 @@ layout = [  [sg.Text('ФИО студента:'), sg.InputText(key='-NAME-')],
             [sg.Button('Ок'), sg.Button('Закрыть'), sg.Text(size=(40, 1), key='output', justification='right')] ]
 
 # Создание окна.
-window = sg.Window('Тестовое приложение', layout)
+window = sg.Window('Скоринг учащегося', layout)
 
 i = 0  # Переменная для отслеживания номера строчки предмета и оценки.
-
 
 # Цикл обработки событий для "events" и получения "values" входных данных.
 while True:
@@ -105,7 +100,7 @@ while True:
         new_combo_key = f'-IN-{i}-'
         new_score_key = f'-SCORE-{i}-'
         window.extend_layout(window['-FRAME-'], [[sg.T('Предмет:'),
-                                                  sg.Combo(lessons, key=new_combo_key, enable_events=True), 
+                                                  sg.Combo(lessons, key=new_combo_key, enable_events=True),
                                                   sg.T('Оценка:'), 
                                                   sg.Combo(scores, key=new_score_key)]])
         i += 1
@@ -117,7 +112,7 @@ while True:
                 idx = key.split('-')[2]
                 subject = values[key]
                 score_key = f'-SCORE-{idx}-'
-                # print(values[score_key])
+                #print(values[score_key])
                 if subject in data and score_key in values:
                     if values[score_key] == 'Отлично':
                         values[score_key] = '5'
@@ -144,11 +139,15 @@ while True:
         new_groups = data_for_colleges[selected_colleges]
         window['-GROUP-'].update(values=new_groups)
 
-    # Обработка изменения предмета
-    if event == new_combo_key:
-        selected_lessons = values[new_combo_key]
-        new_scores = data_lessons[selected_lessons]
-        window[new_score_key].update(values=new_scores)
+    # Обработчик событий для первого выпадающего окна
+    if event.startswith('-IN-'):
+        idx = event.split('-')[2]  # Получаем индекс из ключа
+        selected_subject = values[event]  # Получаем выбранный предмет
+        score_key = f'-SCORE-{idx}-'  # Ключ для соответствующего выпадающего окна с оценками
+
+        # Обновляем значения второго выпадающего окна на основе выбранного предмета
+        if selected_subject in data_lessons:
+            window[score_key].update(values=data_lessons[selected_subject])
 
     # Если пользователь нажмёт 'Ок', Словарь полностью заполнится
     if event == 'Ок':
@@ -157,8 +156,8 @@ while True:
         data['Долги'] = debts
         print(data)
         if predict_student(data) == 1:
-            window['output'].update('Студент отчислен!')
+            window['output'].update('Студент отчислен!', text_color='red')
         else:
-            window['output'].update('Студент не отчислен!')
+            window['output'].update('Студент не отчислен!', text_color='lightgreen')
 
 window.close()
