@@ -5,14 +5,14 @@ import PySimpleGUI as sg
 import pickle
 
 # Импорт модели
-with open('scoring_cb.pkl', 'rb') as file:
+with open('scoring.pkl', 'rb') as file:
     model = pickle.load(file)
 
 
 def predict_student(data_dict):
     student = NewStudent()
     student.load_data_from_dict(data_dict)
-    return model.predict(student.data_processing())[0]
+    return model.predict(student.data_processing())[0].round().astype(int)
 
 # Данные для выпадающего окна
 scores = ['Отлично', 'Хорошо', 'Удовлетворительно', 'Неудовлетворительно', 'Неявка', 'зачтено', 'не зачтено']
@@ -21,7 +21,7 @@ scores = ['Отлично', 'Хорошо', 'Удовлетворительно'
 data = {}
 
 # Всё содержимое окна приложения
-layout = [  [sg.Text('Номер ЛД:'), sg.InputText(key='-LD-', size=(10, 1)), sg.Text('Учебная группа:'), sg.InputText(key='-GROUP-', size=(15, 1))],
+layout = [  [sg.Text('Учебная группа (например, "БПМ"):'), sg.InputText(key='-GROUP-', size=(10, 1)), sg.Text('Семестр:'), sg.InputText(key='-SEM-', size=(15, 1))],
             [sg.Text('Чтобы добавить предмет, нажмите "+"'), sg.B('+', key='-ADD FRAME-')],
             [sg.Frame('', [[sg.T('Успеваемость')]], key='-FRAME-')],
             [sg.Button('Ок'), sg.Button('Закрыть'), sg.Text(size=(40, 1), key='output', justification='right')] ]
@@ -35,8 +35,8 @@ i = 0  # Переменная для отслеживания номера ст�
 while True:
     event, values = window.read()
 
-    data['Номер ЛД'] = values['-LD-']
-    data['Группа'] = values['-GROUP-']
+    data['Семестр'] = values['-SEM-']
+    data[values['-GROUP-']] = 1
 
     # Если пользователь закроет окно или нажмет кнопку 'Закрыть'
     if event == sg.WIN_CLOSED or event == 'Закрыть':
@@ -75,17 +75,15 @@ while True:
                 if values[score_key] == 'не зачтено':
                     values[score_key] = '2'
                 data[subject] = values[score_key]
-                if values[score_key] == '2':
-                    debts += 1 
                 # print(data)  # Выводим словарь для проверки
 
     # Если пользователь нажмёт 'Ок', Словарь полностью заполнится
     if event == 'Ок':
-        data['Долги'] = debts
         print(data)
-        # if predict_student(data) == 1:
-        #     window['output'].update('Студент отчислен!', text_color='red')
-        # else:
-        #     window['output'].update('Студент не отчислен!', text_color='lightgreen')
+        debts = predict_student(data)
+        if debts > 0:
+            window['output'].update(f'Вероятное число двоек в следующем семестре: {debts}', text_color='red')
+        else:
+            window['output'].update(f'Скорее всего, двоек в следующем семестре нет!', text_color='lightgreen')
 
 window.close()
