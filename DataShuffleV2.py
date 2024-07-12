@@ -1,5 +1,6 @@
 import pandas as pd
 
+# Показывает дисциплины как столбцы
 def to_rows(k3):
     k3 = k3.join(pd.DataFrame({data.loc[0, "Дисциплина"]:[]}))
     k3.loc[0] = None
@@ -31,6 +32,7 @@ def to_rows(k3):
             else:
                 k3.loc[a, data.loc[i, "Дисциплина"]] = 2
 
+# Оставляет только строки, где у кажого есть оценки за все 3 семестра
 def norun():
     sem = 3
     for i in range(len(k3)):
