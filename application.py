@@ -22,9 +22,11 @@ data = {}
 
 # Всё содержимое окна приложения
 layout = [  [sg.Text('Учебная группа (например, "БПМ"):'), sg.InputText(key='-GROUP-', size=(10, 1)), sg.Text('Семестр:'), sg.InputText(key='-SEM-', size=(15, 1))],
+            [sg.Text('Количество предметов студента на 3-ем семестре:'), sg.InputText(key='-COUNT-', size=(10 ,1))],
             [sg.Text('Чтобы добавить предмет, нажмите "+"'), sg.B('+', key='-ADD FRAME-')],
             [sg.Frame('', [[sg.T('Успеваемость')]], key='-FRAME-')],
-            [sg.Button('Ок'), sg.Button('Закрыть'), sg.Text(size=(40, 1), key='output', justification='right')] ]
+            [sg.Button('Ок'), sg.Button('Закрыть'), sg.Text(size=(50, 1), key='output1', justification='right')],
+            [sg.Text(size=(60, 1), key='output2', justification='right')] ]
 
 # Создание окна.
 window = sg.Window('Скоринг учащегося', layout)
@@ -79,11 +81,14 @@ while True:
 
     # Если пользователь нажмёт 'Ок', Словарь полностью заполнится
     if event == 'Ок':
+        count = values['-COUNT-']
         print(data)
         debts = predict_student(data)
+        fraction = debts / int(count)
         if debts > 0:
-            window['output'].update(f'Вероятное число двоек в следующем семестре: {debts}', text_color='red')
+            window['output1'].update(f'Вероятное число двоек в следующем семестре: {debts}', text_color='pink')
+            window['output2'].update(f'Доля двоек в следующем семестре: {round(fraction, 2)}', text_color='pink')
         else:
-            window['output'].update(f'Скорее всего, двоек в следующем семестре нет!', text_color='lightgreen')
+            window['output1'].update(f'Скорее всего, двоек в следующем семестре нет!', text_color='lightgreen')
 
 window.close()
