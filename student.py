@@ -1,29 +1,27 @@
 import numpy as np
+import json
+
+with open('lessons.json', 'r', encoding='utf-8') as json_file:
+    lessons = json.load(json_file)
 
 
 class NewStudent:
     def __init__(self):
-        self.lessons = [
-            'Право', 'Физическая культура', 'Инженерная и компьютерная графика.1',
-            'История.1', 'Безопасность жизнедеятельности', 'Инженерная и компьютерная графика',
-            'История', 'Химия', 'Иностранный язык', 'Геодезия', 'Инженерная компьютерная графика',
-            'Информатика', 'Программирование и алгоритмизация', 'Практическая фонетика',
-            'Математика', 'Иностранный язык.1', 'Долги'
-        ]
-        self.scores = ['0','1', '2', '3', '4', '5']
-        self.data = {lesson: np.NaN for lesson in self.lessons}
+        self.lessons = lessons
+        self.programs = ['ББИ', 'БИВТ', 'БИСТ', 'БЛГ', 'БМН', 'БМТ',
+                         'БМТМ', 'БНМ', 'БНМТ', 'БПИ', 'БПМ', 'БТМО',
+                         'БФЗ', 'БЭК', 'БЭН', 'БЭЭ', 'СГД', 'СНТС', 'СФП']
+        self.scores = ['0', '1', '2', '3', '4', '5']
+        self.data = {key: np.NaN for key in list(self.lessons) + list(self.programs)}
 
-    def add_score(self, lesson, score):
-        if lesson in self.data:
-            self.data[lesson] = score
+    def add_score(self, key, score):
+        if key in self.data:
+            self.data[key] = score
 
     def load_data_from_dict(self, data_dict):
         for lesson, score in data_dict.items():
             if lesson in self.data:
                 self.data[lesson] = score
-        debts = int(self.data['Долги'])
-        debts *= -1
-        self.data['Долги'] = str(debts)
 
     def data_processing(self):
         student_data = np.array(self.prepare_data_for_prediction()).reshape(1, -1)
@@ -31,4 +29,4 @@ class NewStudent:
         return student_data
 
     def prepare_data_for_prediction(self):
-        return [self.data[lesson] for lesson in self.lessons]
+        return [self.data[key] for key in self.data]
