@@ -22,7 +22,7 @@ data = {}
 
 # Всё содержимое окна приложения
 layout = [  [sg.Text('Учебная группа (например, "БПМ"):'), sg.InputText(key='-GROUP-', size=(10, 1)), sg.Text('Семестр:'), sg.InputText(key='-SEM-', size=(15, 1))],
-            [sg.Text('Количество предметов студента на 3-ем семестре:'), sg.InputText(key='-COUNT-', size=(10 ,1))],
+            [sg.Text('Количество предметов студента в следующем семестре:'), sg.InputText(key='-COUNT-', size=(10 ,1))],
             [sg.Text('Чтобы добавить предмет, нажмите "+"'), sg.B('+', key='-ADD FRAME-')],
             [sg.Frame('', [[sg.T('Успеваемость')]], key='-FRAME-')],
             [sg.Button('Ок'), sg.Button('Закрыть'), sg.Text(size=(50, 1), key='output1', justification='right')],
