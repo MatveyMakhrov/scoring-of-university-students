@@ -1,4 +1,4 @@
-from .scripts.student import NewStudent
+from scripts.student import NewStudent
 
 import PySimpleGUI as sg
 
