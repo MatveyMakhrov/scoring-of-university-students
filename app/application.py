@@ -1,11 +1,12 @@
-from .scripts.student import NewStudent
+
+from scripts.student import NewStudent
 
 import PySimpleGUI as sg
 
 import pickle
 
 # Импорт модели
-with open('scoring.pkl', 'rb') as file:
+with open('../models/scoring.pkl', 'rb') as file:
     model = pickle.load(file)
 
 

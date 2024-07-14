@@ -1,7 +1,7 @@
 import numpy as np
 import json
 
-with open('lessons.json', 'r', encoding='utf-8') as json_file:
+with open('../lessons.json', 'r', encoding='utf-8') as json_file:
     lessons = json.load(json_file)
 
 
