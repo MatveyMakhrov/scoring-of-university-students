@@ -5,7 +5,7 @@ import PySimpleGUI as sg
 import pickle
 
 # Импорт модели
-with open('../models/scoring.pkl', 'rb') as file:
+with open('models/scoring.pkl', 'rb') as file:
     model = pickle.load(file)
 
 
