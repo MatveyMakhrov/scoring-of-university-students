@@ -21,7 +21,7 @@ pip install -r requirements.txt
 ```
 5. Запустите файл приложения:
 ```
-python app.py
+python application.py
 ```
 
 ## Работа с приложением
