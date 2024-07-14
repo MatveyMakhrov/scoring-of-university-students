@@ -1,4 +1,3 @@
-
 from scripts.student import NewStudent
 
 import PySimpleGUI as sg
