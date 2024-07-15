@@ -1,18 +1,21 @@
 import numpy as np
 import json
 
-with open('./data/lessons.json', 'r', encoding='utf-8') as json_file:
-    lessons = json.load(json_file)
+with open('./data/lessons_next.json', 'r', encoding='utf-8') as json_file:
+    lessons_next = json.load(json_file)
+
+
+with open('./data/lessons_third.json', 'r', encoding='utf-8') as json_file:
+    lessons_third = json.load(json_file)
 
 
 class NewStudent:
-    def __init__(self):
-        self.lessons = lessons
+    def __init__(self, third):
+        self.lessons = lessons_third if third is True else lessons_next
         self.programs = ['ББИ', 'БИВТ', 'БИСТ', 'БЛГ', 'БМН', 'БМТ',
                          'БМТМ', 'БНМ', 'БНМТ', 'БПИ', 'БПМ', 'БТМО',
                          'БФЗ', 'БЭК', 'БЭН', 'БЭЭ', 'СГД', 'СНТС', 'СФП']
-        self.scores = ['0', '1', '2', '3', '4', '5']
-        self.data = {key: np.NaN for key in list(self.lessons) + list(self.programs)}
+        self.data = {key: 0 for key in list(self.lessons) + list(self.programs)}
 
     def add_score(self, key, score):
         if key in self.data:
