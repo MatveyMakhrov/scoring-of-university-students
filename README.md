@@ -27,10 +27,13 @@ python application.py
 ## Работа с приложением
 
 На главном экране приложения, нужно указать название группы, семестр и количество предметов в следующем семестре.
-![image]()
+
+![image](https://github.com/MatveyMakhrov/scoring-of-university-students/blob/main/res/image_1.png)
 
 Далее если нажать на кнопку "+", будут появляться новые строчки, с воможностью указания предмета и оценки.
-![image]()
+
+![image](https://github.com/MatveyMakhrov/scoring-of-university-students/blob/main/res/image_2.png)
 
 И после того, как указать все данные на студента, нужно нажать кнопку "Ок", чтобы предсказать количесвто долгов и долю в следующем семестре.
-![image]()
+
+![image](https://github.com/MatveyMakhrov/scoring-of-university-students/blob/main/res/image_3.png)
