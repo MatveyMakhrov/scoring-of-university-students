@@ -33,6 +33,9 @@ scores = ['Отлично', 'Хорошо', 'Удовлетворительно'
 # Словарь, который будет заполняться пользователем и отправляться на модель.
 data = {}
 
+# Массив для временного хранения данных о предметах
+rows = []
+
 # Всё содержимое окна приложения
 layout = [  [sg.Text('Учебная группа (например, "БПМ"):'), sg.InputText(key='-GROUP-', size=(10, 1)), sg.Text('Семестр предсказания:'), sg.InputText(key='-SEM-', size=(15, 1))],
             [sg.Text('Количество предметов студента в указанном семестре:'), sg.InputText(key='-COUNT-', size=(10 ,1))],
@@ -97,18 +100,29 @@ while True:
     # Если пользователь нажмёт 'Ок', Словарь полностью заполнится
     if event == 'Ок':
         count = values['-COUNT-']
+        data = {k: v for k, v in data.items() if k != ''}
         print(data)
+        third = False
         if data['Семестр'] == 3:
+            third = True
             debts = predict_third_sem(data)
         else:
             debts = predict_next_sem(data)
         fraction = debts / int(count)
         data.clear()
         if debts > 0:
-            window['output1'].update(f'Вероятное число двоек в следующем семестре: {debts}', text_color='pink')
-            window['output2'].update(f'Доля двоек в следующем семестре: {round(fraction, 2)}', text_color='pink')
+            if third:
+                window['output1'].update(f'Вероятное число двоек в третьем семестре: {debts}', text_color='pink')
+                window['output2'].update(f'Доля двоек в третьем семестре: {round(fraction, 2)}', text_color='pink')
+            else:
+                window['output1'].update(f'Вероятное число двоек в указанном семестре: {debts}', text_color='pink')
+                window['output2'].update(f'Доля двоек в указанном семестре: {round(fraction, 2)}', text_color='pink')
         else:
-            window['output1'].update(f'Скорее всего, двоек в следующем семестре нет!', text_color='lightgreen')
-            window['output2'].update(f'')
+            if third:
+                window['output1'].update(f'Скорее всего, двоек в третьем семестре нет!', text_color='lightgreen')
+                window['output2'].update(f'')
+            else:
+                window['output1'].update(f'Скорее всего, двоек в указанном семестре нет!', text_color='lightgreen')
+                window['output2'].update(f'')
 
 window.close()
