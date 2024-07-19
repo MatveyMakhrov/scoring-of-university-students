@@ -151,6 +151,7 @@ python application.py
 - [модель для третьего семестра](notebooks/scoring_third_semester.ipynb)
 После чего результат предсказания выводится на экран.
 
+
 ![third_sem](res/third_sem.gif)
 ![next_sem](res/next_sem.gif)
 ## Распределение ролей
