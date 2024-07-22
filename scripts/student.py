@@ -17,19 +17,15 @@ class NewStudent:
                          'БФЗ', 'БЭК', 'БЭН', 'БЭЭ', 'СГД', 'СНТС', 'СФП']
         self.data = {key: 0 for key in list(self.lessons) + list(self.programs)}
 
-    def add_score(self, key, score):
-        if key in self.data:
-            self.data[key] = score
-
     def load_data_from_dict(self, data_dict):
         for lesson, score in data_dict.items():
             if lesson in self.data:
                 self.data[lesson] = score
 
+    def prepare_data_for_prediction(self):
+        return [self.data[key] for key in self.data]
+
     def data_processing(self):
         student_data = np.array(self.prepare_data_for_prediction()).reshape(1, -1)
         student_data = np.nan_to_num(student_data, nan=0, copy=True)
         return student_data
-
-    def prepare_data_for_prediction(self):
-        return [self.data[key] for key in self.data]
